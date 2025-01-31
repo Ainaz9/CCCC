@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCCSharp", "C##\CCCSharp.csproj", "{E997CF1E-59C0-42E5-9634-55F676AAAD59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Примеры 2 задания", "Примеры 2 задания\Примеры 2 задания.csproj", "{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E997CF1E-59C0-42E5-9634-55F676AAAD59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E997CF1E-59C0-42E5-9634-55F676AAAD59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E997CF1E-59C0-42E5-9634-55F676AAAD59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E997CF1E-59C0-42E5-9634-55F676AAAD59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
