@@ -1,450 +1,553 @@
 ﻿
-
 namespace C_Sharp
 {
-    #region Билет 1. Задание 2 
-    class EventGenerator
-    {
-        public event Action<string> OnEvent; // Событие с текстовым аргументом
-        private string name; // Текстовое поле с названием объекта
-
-        public EventGenerator(string name)
-        {
-            this.name = name;
-        }
-
-        public void GenerateEvent()
-        {
-            OnEvent?.Invoke(name); // Генерация события с передачей имени объекта
-        }
-    }
-
-    class EventHandlerClass
-    {
-        public void HandleEvent(string message)
-        {
-            Console.WriteLine($"Событие получено от: {message}");
-        }
-    }
-    #endregion
-    #region Билет 1. Задание 3 
-    abstract class Document
-    {
-        public abstract void GetInfo();
-        public abstract void Open();
-        public abstract void Close();
-    }
-    
-    // Конкретный класс для DOCX
-    class DocxDocument : Document
-    {
-        public override void GetInfo() => Console.WriteLine("Это документ DOCX.");
-        public override void Open() => Console.WriteLine("Открытие DOCX файла...");
-        public override void Close() => Console.WriteLine("Закрытие DOCX файла...");
-    }
-
-    // Конкретный класс для PDF
-    class PdfDocument : Document
-    {
-        public override void GetInfo() => Console.WriteLine("Это документ PDF.");
-        public override void Open() => Console.WriteLine("Открытие PDF файла...");
-        public override void Close() => Console.WriteLine("Закрытие PDF файла...");
-    }
-
-    // Конкретный класс для XML
-    class XmlDocument : Document
-    {
-        public override void GetInfo() => Console.WriteLine("Это документ XML.");
-        public override void Open() => Console.WriteLine("Открытие XML файла...");
-        public override void Close() => Console.WriteLine("Закрытие XML файла...");
-    }
-
-    // Абстрактная фабрика
-    abstract class DocumentCreator
-    {
-        public abstract Document CreateDocument();
-    }
-
-    // Конкретные фабрики
-    class DocxCreator : DocumentCreator
-    {
-        public override Document CreateDocument() => new DocxDocument();
-    }
-
-    class PdfCreator : DocumentCreator
-    {
-        public override Document CreateDocument() => new PdfDocument();
-    }
-
-    class XmlCreator : DocumentCreator
-    {
-        public override Document CreateDocument() => new XmlDocument();
-    }
-    #endregion
-    #region Билет 2. Задание 2 
-    class TextArray
-    {
-        private string[] texts;
-
-        public TextArray(string[] initialTexts)
-        {
-            texts = initialTexts;
-        }
-
-        // Одномерный индексатор для работы с элементами массива
-        public string this[int index]
-        {
-            get
-            {
-                index = NormalizeIndex(index, texts.Length);
-                return texts[index];
-            }
-            set
-            {
-                index = NormalizeIndex(index, texts.Length);
-                texts[index] = value;
-            }
-        }
-
-        // Двумерный индексатор для работы с символами в строках
-        public char this[int row, int col]
-        {
-            get
-            {
-                row = NormalizeIndex(row, texts.Length);
-                col = NormalizeIndex(col, texts[row].Length);
-                return texts[row][col];
-            }
-        }
-
-        // Метод нормализации индексов (циклическая перестановка)
-        private int NormalizeIndex(int index, int length)
-        {
-            return (index % length + length) % length; // Работает для отрицательных индексов
-        }
-
-        // Вывод массива для удобства
-        public void PrintArray()
-        {
-            foreach (var text in texts)
-            {
-                Console.WriteLine(text);
-            }
-        }
-    }
-    #endregion
-    #region Билет 2. Задание 3 
-    class Exam
-    {
-        public string Name { get; set; }  // Название экзамена
-        public int Grade { get; set; }    // Оценка
-
-        public Exam(string name, int grade)
-        {
-            Name = name;
-            Grade = grade;
-        }
-
-        public override string ToString() => $"{Name}: {Grade}"; // Удобный вывод
-    }
-    class Student
-    {
-        public string FullName { get; set; } // ФИО студента
-        public int Age { get; set; }         // Возраст
-        public List<Exam> Exams { get; set; } // Список экзаменов
-
-        public Student(string fullName, int age)
-        {
-            FullName = fullName;
-            Age = age;
-            Exams = new List<Exam>();
-        }
-
-        // Метод для добавления экзамена
-        public void AddExam(string name, int grade)
-        {
-            Exams.Add(new Exam(name, grade));
-        }
-
-        // Метод для изменения оценки по экзамену
-        public void UpdateExam(string name, int newGrade)
-        {
-            foreach (var exam in Exams)
-            {
-                if (exam.Name == name)
-                {
-                    exam.Grade = newGrade;
-                    return;
-                }
-            }
-            Console.WriteLine($"Экзамен '{name}' не найден!");
-        }
-
-        // Метод для сортировки экзаменов (по убыванию или возрастанию)
-        public void SortExams(bool ascending = true)
-        {
-            Exams = MergeSort(Exams, ascending);
-        }
-
-        // Реализация сортировки слиянием (Merge Sort)
-        private List<Exam> MergeSort(List<Exam> list, bool ascending)
-        {
-            if (list.Count <= 1) return list;
-
-            int mid = list.Count / 2;
-            List<Exam> left = list.GetRange(0, mid);
-            List<Exam> right = list.GetRange(mid, list.Count - mid);
-
-            return Merge(MergeSort(left, ascending), MergeSort(right, ascending), ascending);
-        }
-
-        private List<Exam> Merge(List<Exam> left, List<Exam> right, bool ascending)
-        {
-            List<Exam> result = new List<Exam>();
-            int i = 0, j = 0;
-
-            while (i < left.Count && j < right.Count)
-            {
-                if ((ascending && left[i].Grade <= right[j].Grade) ||
-                    (!ascending && left[i].Grade >= right[j].Grade))
-                {
-                    result.Add(left[i++]);
-                }
-                else
-                {
-                    result.Add(right[j++]);
-                }
-            }
-
-            while (i < left.Count) result.Add(left[i++]);
-            while (j < right.Count) result.Add(right[j++]);
-
-            return result;
-        }
-
-        // Метод для вывода информации о студенте и его экзаменах
-        public void PrintInfo()
-        {
-            Console.WriteLine($"\nСтудент: {FullName}, Возраст: {Age}");
-            Console.WriteLine("Экзамены:");
-            foreach (var exam in Exams)
-            {
-                Console.WriteLine($"  {exam}");
-            }
-        }
-    }
-    #endregion
-    #region Билет 3. Задание 2
-    class NumberWrapper
-    {
-        public int Value { get; set; } // Целочисленное поле
-
-        public NumberWrapper(int value)
-        {
-            Value = value;
-        }
-
-        // Перегрузка оператора true
-        public static bool operator true(NumberWrapper obj)
-        {
-            return obj.Value == 2 || obj.Value == 3 || obj.Value == 5 || obj.Value == 7;
-        }
-
-        // Перегрузка оператора false
-        public static bool operator false(NumberWrapper obj)
-        {
-            return obj.Value < 1 || obj.Value > 10;
-        }
-
-        // Перегрузка оператора &
-        public static NumberWrapper operator &(NumberWrapper a, NumberWrapper b)
-        {
-            return new NumberWrapper(a.Value & b.Value); // Побитовое И
-        }
-
-        // Перегрузка оператора |
-        public static NumberWrapper operator |(NumberWrapper a, NumberWrapper b)
-        {
-            return new NumberWrapper(a.Value | b.Value); // Побитовое ИЛИ
-        }
-
-        public override string ToString() => $"[{Value}]";
-    }
-    #endregion
-
     class Program
     {
+        #region #1 задача
+
+        class Point
+        {
+            public double X { get; set; }
+            public double Y { get; set; }
+
+            public Point(double x, double y)
+            {
+                X = x;
+                Y = y;
+            }
+
+            public double DistanceTo(Point other)
+            {
+                return Math.Sqrt(Math.Pow(other.X - X, 2) + Math.Pow(other.Y - Y, 2)); // т.Пифагора
+            }
+        }
+
+        class Circle
+        {
+            public Point Center { get; set; }
+            public double Radius { get; set; }
+
+            public Circle(double x, double y, double radius)
+            {
+                Center = new Point(x, y);
+                Radius = radius;
+            }
+
+            public double GetArea()
+            {
+                return Math.PI * Math.Pow(Radius, 2);
+            }
+
+            public bool Intersects(Circle other)
+            {
+                double distance = Center.DistanceTo(other.Center);
+                return distance <= (Radius + other.Radius);
+            }
+
+            public static bool operator <(Circle c1, Circle c2) => c1.Radius < c2.Radius;
+            public static bool operator >(Circle c1, Circle c2) => c1.Radius > c2.Radius;
+
+        }
+        #endregion
+
+        #region #2 задача
+
+        class Graph
+        {
+            // Список рёбер, каждое ребро представлено как кортеж из двух точек
+            public List<(PointGraph, PointGraph)> Edges { get; set; } = new List<(PointGraph, PointGraph)>();
+
+            // Метод для добавления ребра
+            public void AddEdge(PointGraph p1, PointGraph p2)
+            {
+                Edges.Add((p1, p2));
+            }
+
+            // Метод для удаления ребра
+            public void RemoveEdge(PointGraph p1, PointGraph p2)
+            {
+                for (int i = Edges.Count - 1; i >= 0; i--) // Идём с конца списка, чтобы безопасно удалять элементы
+                {
+                    var edge = Edges[i];
+                    if ((edge.Item1.Equals(p1) && edge.Item2.Equals(p2)) ||
+                        (edge.Item1.Equals(p2) && edge.Item2.Equals(p1)))
+                    {
+                        Edges.RemoveAt(i);
+                        Console.WriteLine($"Удалено ребро между {p1} и {p2}");
+                    }
+                }
+            }
+
+            // Метод для поиска пути между точками
+            public bool PathExists(PointGraph start, PointGraph end, HashSet<PointGraph> visited = null)
+            {
+                if (visited == null) visited = new HashSet<PointGraph>();
+                if (start == end) return true; // Если начальная и конечная точки одинаковы, путь существует
+
+                visited.Add(start); // Добавляем точку в посещенные
+
+                foreach (var edge in Edges)
+                {
+                    if (edge.Item1 == start && !visited.Contains(edge.Item2))
+                    {
+                        if (PathExists(edge.Item2, end, visited)) return true;
+                    }
+                    else if (edge.Item2 == start && !visited.Contains(edge.Item1))
+                    {
+                        if (PathExists(edge.Item1, end, visited)) return true;
+                    }
+                }
+
+                return false; // Путь не найден
+            }
+        }
+
+        // Класс для представления точки
+        class PointGraph
+        {
+            public double X { get; set; }
+            public double Y { get; set; }
+
+            public PointGraph(double x, double y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
+
+
+        #endregion
+
+        #region #3 задача
+
+        // Класс для представления книги
+        class Book
+        {
+            public string Title { get; set; }
+            public string Author { get; set; }
+            public DateTime ReleaseDate { get; set; }
+
+            public Book(string title, string author, DateTime releaseDate)
+            {
+                Title = title;
+                Author = author;
+                ReleaseDate = releaseDate;
+            }
+
+            public override string ToString()
+            {
+                return $"Название: {Title}, Автор: {Author}, Дата выхода: {ReleaseDate.ToShortDateString()}";
+            }
+        }
+
+        // Класс для представления библиотеки
+        class Library
+        {
+            // Список книг в библиотеке
+            public List<Book> Books { get; set; } = new List<Book>();
+
+            // Метод для добавления книги
+            public void AddBook(Book book)
+            {
+                Books.Add(book);
+            }
+
+            // Метод для удаления книги по названию
+            public void RemoveBook(string title)
+            {
+                int removedCount = Books.RemoveAll(book => book.Title == title);
+                if (removedCount > 0)
+                    Console.WriteLine("Книга удалена");
+                else
+                    Console.WriteLine("Такой книги нету");
+            }
+
+            // Метод для сортировки по названию
+            public void SortByTitle()
+            {
+                Books = Books.OrderBy(b => b.Title).ToList();
+            }
+
+            // Метод для сортировки по автору
+            public void SortByAuthor()
+            {
+                Books = Books.OrderBy(b => b.Author).ToList();
+            }
+
+            // Метод для сортировки по дате выхода
+            public void SortByReleaseDate()
+            {
+                Books = Books.OrderBy(b => b.ReleaseDate).ToList();
+            }
+
+            // Метод для вывода всех книг
+            public void DisplayBooks()
+            {
+                if (Books.Count == 0)
+                {
+                    Console.WriteLine("Библиотека пуста.");
+                    return;
+                }
+
+                foreach (var book in Books)
+                {
+                    Console.WriteLine(book);
+                }
+            }
+        }
+
+        #endregion
+
+        #region #4 задача
+
+        // Абстрактный класс Product
+        public abstract class Product
+        {
+            public string Name { get; set; }
+            public int Quantity { get; set; }
+            public decimal Price { get; set; }
+
+            public Product(string name, int quantity, decimal price)
+            {
+                Name = name;
+                Quantity = quantity;
+                Price = price;
+            }
+
+            // Абстрактный метод для расчета скидки
+            public abstract decimal CountDiscount();
+
+            // Метод для вывода информации о товаре с учетом скидки
+            public void PrintInfo()
+            {
+                decimal discount = CountDiscount();
+                decimal priceWithDiscount = Price - discount;
+                Console.WriteLine($"Название: {Name}, Количество: {Quantity}, Цена: {Price:C}, Скидка: {discount:C}, Цена со скидкой: {priceWithDiscount:C}");
+            }
+        }
+
+        // Класс Electronic
+        public class Electronic : Product
+        {
+            public Electronic(string name, int quantity, decimal price) : base(name, quantity, price) { }
+
+            // Реализация метода для расчета скидки на электронные товары
+            public override decimal CountDiscount()
+            {
+                if (Quantity > 5)
+                    return Price * 0.15m; // Скидка 15%, если товара больше 5 единиц
+                return Price * 0.05m; // Иначе скидка 5%
+            }
+        }
+
+        // Класс Furniture
+        public class Furniture : Product
+        {
+            public Furniture(string name, int quantity, decimal price) : base(name, quantity, price) { }
+
+            // Реализация метода для расчета скидки на мебель
+            public override decimal CountDiscount()
+            {
+                if (Quantity > 2)
+                    return Price * 0.10m; // Скидка 10%, если товара больше 2 единиц
+                return Price * 0.03m; // Иначе скидка 3%
+            }
+        }
+
+        // Класс Clothes
+        public class Clothes : Product
+        {
+            public Clothes(string name, int quantity, decimal price) : base(name, quantity, price) { }
+
+            // Реализация метода для расчета скидки на одежду
+            public override decimal CountDiscount()
+            {
+                if (Quantity > 10)
+                    return Price * 0.20m; // Скидка 20%, если товара больше 10 единиц
+                return Price * 0.07m; // Иначе скидка 7%
+            }
+        }
+
+        // Абстрактная фабрика для создания продуктов
+        public abstract class ProductFactory
+        {
+            public abstract Product CreateProduct(string name, int quantity, decimal price);
+        }
+
+        // Фабрика для создания электронных товаров
+        public class ElectronicFactory : ProductFactory
+        {
+            public override Product CreateProduct(string name, int quantity, decimal price)
+            {
+                return new Electronic(name, quantity, price);
+            }
+        }
+
+        // Фабрика для создания мебели
+        public class FurnitureFactory : ProductFactory
+        {
+            public override Product CreateProduct(string name, int quantity, decimal price)
+            {
+                return new Furniture(name, quantity, price);
+            }
+        }
+
+        // Фабрика для создания одежды
+        public class ClothesFactory : ProductFactory
+        {
+            public override Product CreateProduct(string name, int quantity, decimal price)
+            {
+                return new Clothes(name, quantity, price);
+            }
+        }
+
+        #endregion
+
+        #region #5 задача
+
+        class Matrix
+        {
+            private int[,] data;
+
+            // Конструктор: количество строк и столбцов, заполняется случайными числами от 1 до 100
+            public Matrix(int rows, int cols)
+            {
+                data = new int[rows, cols];
+                Random rand = new Random();
+                for (int i = 0; i < rows; i++)
+                {
+                    for (int j = 0; j < cols; j++)
+                    {
+                        data[i, j] = rand.Next(1, 101); // Случайное число от 1 до 100
+                    }
+                }
+            }
+
+            // Переопределение оператора сложения матриц
+            public static Matrix operator +(Matrix m1, Matrix m2)
+            {
+                if (m1.Rows != m2.Rows || m1.Cols != m2.Cols)
+                    throw new InvalidOperationException("Матрицы должны иметь одинаковые размеры для сложения.");
+
+                Matrix result = new Matrix(m1.Rows, m1.Cols);
+                for (int i = 0; i < m1.Rows; i++)
+                {
+                    for (int j = 0; j < m1.Cols; j++)
+                    {
+                        result.data[i, j] = m1.data[i, j] + m2.data[i, j];
+                    }
+                }
+                return result;
+            }
+
+            // Переопределение оператора умножения матрицы на число
+            public static Matrix operator *(Matrix m, int scalar)
+            {
+                Matrix result = new Matrix(m.Rows, m.Cols);
+                for (int i = 0; i < m.Rows; i++)
+                {
+                    for (int j = 0; j < m.Cols; j++)
+                    {
+                        result.data[i, j] = m.data[i, j] * scalar;
+                    }
+                }
+                return result;
+            }
+
+            // Метод транспонирования матрицы
+            public Matrix Transpose()
+            {
+                Matrix result = new Matrix(Cols, Rows);
+                for (int i = 0; i < Rows; i++)
+                {
+                    for (int j = 0; j < Cols; j++)
+                    {
+                        result.data[j, i] = data[i, j];
+                    }
+                }
+                return result;
+            }
+
+            // Метод для вывода матрицы на экран
+            public void Print()
+            {
+                for (int i = 0; i < Rows; i++)
+                {
+                    for (int j = 0; j < Cols; j++)
+                    {
+                        Console.Write(data[i, j] + "\t");
+                    }
+                    Console.WriteLine();
+                }
+            }
+
+            // Свойства для получения количества строк и столбцов
+            public int Rows => data.GetLength(0);
+            public int Cols => data.GetLength(1);
+        }
+
+        #endregion
         static void Main()
         {
-            #region Билет 1. Задание 2
+            #region #1 задача
 
-            /* Напишите программу, в которой есть класс с событием. Событие обрабатывается методами, имеющими
-            текстовый аргумент и не возвращающими результат. У класса должно быть текстовое поле, в которое при
-            создании объекта класса записывается название объекта. В классе должен быть описан метод для
-            генерирования события, который вызывается без аргументов. При генерировании события аргументом
-            передается значение текстового поля объекта, генерирующего событие. Еще один класс, описанный в
-            программе, должен содержать метод с текстовым аргументом, не возвращающий результат. При вызове
-            метод отображает значение своего текстового аргумента. В главном методе программы необходимо создать
-            два объекта первого класса и один объект второго класса.Для событий объектов первого класса
-            обработчиком регистрируется метод объекта второго класса(получается, что метод одного и того же
-            объекта зарегистрирован обработчиком для событий двух объектов).Для каждого из объектов первого
-            класса необходимо сгенерировать событие. При этом метод, зарегистрированный обработчиком, должен
-            выводить название объекта, сгенерировавшего событие. */
+                // Класс точка (координаты и метод для поиска расстояния между точками) и класс
+                // окружность(свойство радиус и координаты центра окружности,
+                // метод для расчета площади и метод, который пишет пересекаются окружности или нет,
+                // перегрузка операторов <, > для радиуса
 
-            EventGenerator obj1 = new EventGenerator("Объект 1");
-            EventGenerator obj2 = new EventGenerator("Объект 2");
-            EventHandlerClass handler = new EventHandlerClass();
+                Circle c1 = new Circle(0, 0, 5);
+                Circle c2 = new Circle(4, 0, 3);
 
-            // Регистрация обработчика для событий обоих объектов
-            obj1.OnEvent += handler.HandleEvent;
-            obj2.OnEvent += handler.HandleEvent;
-
-            // Генерация событий
-            obj1.GenerateEvent();
-            obj2.GenerateEvent();
-
-            Console.WriteLine();
-
-            #endregion
-            #region Билет 1. Задание 3 
-
-            /* Необходимо написать реализацию паттерна "Фабричный метод". Необходимо реализовать работу с
-            различными типами файлов. Есть файлы: docx, pdf, xml. Необходимо создать классы, которые будут
-            создавать документы этих типов. Каждый документ имеет по три метода: вывод информации о типе этого
-            документа на экран, вывод информации о размере файла и метод для сохранениям файла в данном
-            формате. */
-
-            DocumentCreator docxCreator = new DocxCreator();
-            DocumentCreator pdfCreator = new PdfCreator();
-            DocumentCreator xmlCreator = new XmlCreator();
-
-            // Создаем документы
-            Document docx = docxCreator.CreateDocument();
-            Document pdf = pdfCreator.CreateDocument();
-            Document xml = xmlCreator.CreateDocument();
-
-            // Работаем с документами
-            docx.GetInfo();
-            docx.Open();
-            docx.Close();
-
-            Console.WriteLine();
-
-            pdf.GetInfo();
-            pdf.Open();
-            pdf.Close();
-
-            Console.WriteLine();
-
-            xml.GetInfo();
-            xml.Open();
-            xml.Close();
-
-            Console.WriteLine();
-
-            #endregion
-            #region Билет 2. Задание 2
-
-            /* Напишите программу с классом, в котором есть текстовый массив. Опишите в классе одномерный и
-            двумерный индексаторы. Одномерный индексатор позволяет прочитать элемент текстового массива и
-            присвоить новое значение элементу текстового массива. Двумерный индексатор позволяет прочитать
-            символ в элементе текстового массива (первый индекс определяет элемент в текстовом массиве, а второй
-            индекс определяет символ в тексте). Предусмотрите циклическую перестановку индексов в случае, если
-            они выходят за верхнюю допустимую границу  */
-
-            string[] words = { "Привет", "Мир", "C#" };
-            TextArray textArray = new TextArray(words);
-
-            // Тест одномерного индексатора
-            Console.WriteLine("Одномерный индексатор:");
-            Console.WriteLine(textArray[0]);  // "Привет"
-            Console.WriteLine(textArray[1]);  // "Мир"
-            Console.WriteLine(textArray[2]);  // "C#"
-            Console.WriteLine(textArray[-1]); // "C#" (циклически)
-
-            textArray[1] = "Вселенная"; // Изменение второго элемента
-            Console.WriteLine(textArray[1]);  // "Вселенная"
-
-            Console.WriteLine("\nДвумерный индексатор:");
-            Console.WriteLine(textArray[0, 0]); // 'П'
-            Console.WriteLine(textArray[1, 2]); // 'л'
-            Console.WriteLine(textArray[2, 1]); // '#' 
-            Console.WriteLine(textArray[2, 10]); // 'C' (циклический индекс)
-
-            Console.WriteLine("\nОбновленный массив:");
-            textArray.PrintArray();
-
-            Console.WriteLine();
-
-            #endregion
-            #region Билет 2. Задание 3 
-
-            /* Необходимо создать класса студента. У студента определить ФИО, возраст, список экзаменов(экзамен и
-            оценка), метод для сортировки экзаменов по убыванию и возврастанию(сортировка слиянием). Необходимо
-            предусмотреть возможность изменять экзамены.  */
-
-            // Создаем студента
-            Student student = new Student("Иван Петров", 20);
-
-            // Добавляем экзамены
-            student.AddExam("Математика", 85);
-            student.AddExam("Физика", 90);
-            student.AddExam("История", 75);
-            student.AddExam("Информатика", 95);
-
-            Console.WriteLine("Исходный список экзаменов:");
-            student.PrintInfo();
-
-            // Сортируем по возрастанию
-            student.SortExams(true);
-            Console.WriteLine("\nСортировка по возрастанию:");
-            student.PrintInfo();
-
-            // Сортируем по убыванию
-            student.SortExams(false);
-            Console.WriteLine("\nСортировка по убыванию:");
-            student.PrintInfo();
-
-            // Обновляем оценку
-            student.UpdateExam("Физика", 100);
-            Console.WriteLine("\nПосле изменения оценки по Физике:");
-            student.PrintInfo();
-
-            Console.WriteLine();
-
-            #endregion
-            #region Билет 3. Задание 2
-
-            /*  Напишите программу, в которой есть класс с целочисленным полем. Перегрузите операторы &, |, true и
-            false так, чтобы с объектами класса можно было использовать операторы && и ||. Перегрузку следует
-            реализовать так, чтобы объект считался "истинным", если значение его числового поля равно 2, 3, 5 или 7.
-            Объект должен рассматриваться как "ложный", если значение его числового поля меньше 1 или больше 10. */
-
-            NumberWrapper num1 = new NumberWrapper(3); // "Истинный"
-            NumberWrapper num2 = new NumberWrapper(5); // "Истинный"
-            NumberWrapper num3 = new NumberWrapper(8); // "Ложный"
-            NumberWrapper num4 = new NumberWrapper(12); // "Ложный"
-
-            // Проверка оператора true/false
-            Console.WriteLine(num1 ? "num1 Истина" : "num1 Ложь");
-            Console.WriteLine(num3 ? "num3 Истина" : "num3 Ложь");
-
-            // Использование && и ||
-            if (num1 && num2) Console.WriteLine("num1 && num2: Оба истинные");
-            if (num1 || num3) Console.WriteLine("num1 || num3: Хотя бы один истинный");
-            if (num3 && num4) Console.WriteLine("num3 && num4: Оба истинные (не выведется)");
-
-            // Демонстрация работы & и |
-            NumberWrapper result1 = num1 & num2;
-            NumberWrapper result2 = num1 | num3;
-
-            Console.WriteLine($"num1 & num2 = {result1}");
-            Console.WriteLine($"num1 | num3 = {result2}");
-
-            Console.WriteLine();
+                Console.WriteLine($"Площадь первой окружности: {c1.GetArea()}");
+                Console.WriteLine($"Площадь второй окружности: {c2.GetArea()}");
+                Console.WriteLine($"Окружности пересекаются: {c1.Intersects(c2)}");
+                Console.WriteLine($"Первая окружность < второй: {c1 < c2}");
+                Console.WriteLine($"Первая окружность > второй: {c1 > c2}");
 
             #endregion
 
+            #region #2 задача
+
+            // Класс граф в нем свойство список ребер с кортежем ,
+            // метод для добавления ребра, метод для удаления ребра,
+            // метод для поиска пути между точками
+
+            // Создаем точки
+            PointGraph p1 = new PointGraph(0, 0);
+            PointGraph p2 = new PointGraph(1, 1);
+            PointGraph p3 = new PointGraph(2, 2);
+
+            // Создаем граф и добавляем рёбра
+            Graph graph = new Graph();
+            graph.AddEdge(p1, p2);
+            graph.AddEdge(p2, p3);
+
+            // Проверяем, существует ли путь между точками
+            Console.WriteLine($"Путь между p1 и p3: {graph.PathExists(p1, p3)}");
+
+            // Удаляем ребро
+            graph.RemoveEdge(p1, p2);
+            Console.WriteLine($"Путь между p1 и p3 после удаления ребра: {graph.PathExists(p1, p3)}");
+
+            #endregion
+
+            #region #3 задача
+
+            //  Класс Library в нем поле List<Book>, class Book, поля автор, название, дата выхода,
+            //  в классе Library метод AddBook, RemoveBook, вроде по названию
+            //  и сортировки по названию/автору/дате выхода. 
+
+            // Создаем библиотеку
+            Library library = new Library();
+
+            // Добавляем книги
+            library.AddBook(new Book("Война и мир", "Лев Толстой", new DateTime(1869, 1, 1)));
+            library.AddBook(new Book("Преступление и наказание", "Фёдор Достоевский", new DateTime(1866, 1, 1)));
+            library.AddBook(new Book("1984", "Джордж Оруэлл", new DateTime(1949, 6, 8)));
+
+            // Отображаем книги
+            Console.WriteLine("Все книги в библиотеке:");
+            library.DisplayBooks();
+            Console.WriteLine();
+
+            // Сортируем книги по названию
+            library.SortByTitle();
+            Console.WriteLine("Книги, отсортированные по названию:");
+            library.DisplayBooks();
+            Console.WriteLine();
+
+            // Сортируем книги по автору
+            library.SortByAuthor();
+            Console.WriteLine("Книги, отсортированные по автору:");
+            library.DisplayBooks();
+            Console.WriteLine();
+
+            // Сортируем книги по дате выхода
+            library.SortByReleaseDate();
+            Console.WriteLine("Книги, отсортированные по дате выхода:");
+            library.DisplayBooks();
+            Console.WriteLine();
+
+            // Удаляем книгу
+            library.RemoveBook("Преступление и наказание");
+            Console.WriteLine("После удаления книги:");
+            library.DisplayBooks();
+
+            #endregion
+
+            #region #4 задача
+
+            // Фабричный метод с покупками, Electronic, Furniture, Clothes.
+            // Сделать фабрику, которая создавала бы все эти типы. А эти 3 типа наследовать
+            // от абстрактного класса Product в нем название, количество, цена, методы:
+            // PrintInfo, где все поля выводятся с учетом скидки.
+            // И countDiscount расчет скидки на основе чего-либо (придумать самому условие),
+            // реализовать эти методы в трех типах
+
+            // Создание фабрик
+            ProductFactory electronicFactory = new ElectronicFactory();
+            ProductFactory furnitureFactory = new FurnitureFactory();
+            ProductFactory clothesFactory = new ClothesFactory();
+
+            // Создание продуктов через фабрики
+            Product laptop = electronicFactory.CreateProduct("Ноутбук", 6, 50000);
+            Product sofa = furnitureFactory.CreateProduct("Диван", 3, 20000);
+            Product shirt = clothesFactory.CreateProduct("Рубашка", 12, 1500);
+
+            // Вывод информации о продуктах
+            Console.WriteLine("Информация о продукте (с учетом скидки):");
+            laptop.PrintInfo();
+            sofa.PrintInfo();
+            shirt.PrintInfo();
+
+            #endregion
+
+            #region #5 задача
+
+            // Класс матрица целых чисел
+            // Конструктор количество строк и столбцов и заполняются
+            // рандомными числами от 1 до 100
+            // Переопределить операцию сложения и умножения на число
+            // Методы транспонирование матрицы и вывода на экран
+
+            // Создаем матрицы 3x3
+            Matrix matrix1 = new Matrix(3, 3);
+            Matrix matrix2 = new Matrix(3, 3);
+
+            Console.WriteLine("Матрица 1:");
+            matrix1.Print();
+            Console.WriteLine();
+
+            Console.WriteLine("Матрица 2:");
+            matrix2.Print();
+            Console.WriteLine();
+
+            // Сложение матриц
+            try
+            {
+                Matrix sum = matrix1 + matrix2;
+                Console.WriteLine("Результат сложения:");
+                sum.Print();
+                Console.WriteLine();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            // Умножение матрицы на число
+            Matrix multiplied = matrix1 * 5;
+            Console.WriteLine("Матрица 1, умноженная на 5:");
+            multiplied.Print();
+            Console.WriteLine();
+
+            // Транспонирование матрицы
+            Matrix transposed = matrix1.Transpose();
+            Console.WriteLine("Транспонированная матрица 1:");
+            transposed.Print();
+
+            #endregion
         }
     }
 }

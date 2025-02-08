@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCCSharp", "C##\CCCSharp.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Примеры 2 задания", "Примеры 2 задания\Примеры 2 задания.csproj", "{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Practice", "Practice\Practice.csproj", "{358E00C5-821B-4530-B3FC-17071214399A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoborBallov", "DoborBallov\DoborBallov.csproj", "{BE2EDBB0-C20C-40CB-BC75-8D33709A0B0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA7FEC08-06F7-4F64-BCDE-DCED408DE68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{358E00C5-821B-4530-B3FC-17071214399A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{358E00C5-821B-4530-B3FC-17071214399A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{358E00C5-821B-4530-B3FC-17071214399A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{358E00C5-821B-4530-B3FC-17071214399A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2EDBB0-C20C-40CB-BC75-8D33709A0B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2EDBB0-C20C-40CB-BC75-8D33709A0B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2EDBB0-C20C-40CB-BC75-8D33709A0B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2EDBB0-C20C-40CB-BC75-8D33709A0B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
