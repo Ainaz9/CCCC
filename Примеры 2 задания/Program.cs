@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 
@@ -377,12 +378,6 @@ namespace KR1
         {
             #region #1 Git. Основные команды
 
-            // git init — Инициализация репозитория. Эта команда создаёт новый локальный репозиторий в текущей папке.
-            // git clone — Клонирование репозитория. Скачивает существующий репозиторий с сервера(например, с GitHub) на локальный компьютер.
-            // git add — Добавление файлов в индекс (стейджинг). Файлы должны быть добавлены в индекс перед коммитом.
-            // git commit — Фиксация изменений. Сохраняет изменения в локальном репозитории.Комментарий обязателен!
-            // git push — Отправка коммитов на сервер. Загружает локальные изменения в удалённый репозиторий(GitHub, GitLab и т.д.).
-
             #endregion
 
             #region #3 Абстрактные классы. Интерфейсы. Примеры
@@ -483,9 +478,40 @@ namespace KR1
             Console.WriteLine(boxedNumber); // 42
 
             // Распаковка (Unboxing)
-            object boxedValue = 100; // Упаковка (Boxing)
-            int unboxedValue = (int)boxedValue;
+            int unboxedValue = (int)boxedNumber;
             Console.WriteLine(unboxedValue);
+
+            try
+            {
+                double invalidUnboxing = (double)boxedNumber; // Попытка распаковать int как double
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Ошибка при распаковке: " + ex.Message);
+            }
+
+            ArrayList list = new ArrayList();
+
+            // Упаковка: добавление значимых типов в коллекцию
+            list.Add(10); // int
+            list.Add(3.14); // double
+            list.Add(true); // bool
+
+            // Распаковка: извлечение значений из коллекции
+            int intValue = (int)list[0];
+            double doubleValue = (double)list[1];
+            bool boolValue = (bool)list[2];
+
+            Console.WriteLine($"int: {intValue}, double: {doubleValue}, bool: {boolValue}");
+
+            // Примитивные типы, такие как int, double, bool, обычно хранятся на стеке,
+            // если они являются частью локальных переменных метода. Однако, когда
+            // примитивные типы упаковываются (boxing), они перемещаются в кучу, так как
+            // упаковка предполагает создание объекта. Это замедляет выполнение программы,
+            // так как требует дополнительных операций выделения памяти и преобразования.
+            // Упаковка(boxing) происходит, когда значение типа - значения(например, int) преобразуется
+            // в тип object.Распаковка(unboxing) — это обратный процесс, когда объект преобразуется обратно
+            // в тип-значение.Оба процесса требуют дополнительных ресурсов и могут негативно сказаться на производительности.
 
             #endregion
 
@@ -664,19 +690,33 @@ namespace KR1
 
             #region #13 Var. Примеры
 
-            var number1 = 10;        // Определится как int
-            var text = "Hello";     // Определится как string
-            var pi = 3.14;         // Определится как double
+            // var используется для неявной типизации переменных. Это означает,
+            // что компилятор сам определяет тип переменной на основе значения,
+            // которое ей присваивается.
 
-            var numbers1 = new List<int> { 1, 2, 3 }; // List<int>
-            foreach (var num in numbers)
+            var number1 = 10; // Компилятор определяет тип как int
+            var text = "Hello, World!"; // Компилятор определяет тип как string
+            var flag = true; // Компилятор определяет тип как bool
+
+            var numbers1 = new List<int> { 1, 2, 3, 4, 5 }; // Тип: List<int>
+            var dictionary = new Dictionary<string, int> // Тип: Dictionary<string, int>
             {
-                Console.WriteLine(num); // Выводит числа
+                { "one", 1 },
+                { "two", 2 }
+            };
+
+            var person = new { Name = "Alice", Age = 25 }; // Анонимный тип
+            Console.WriteLine($"Name: {person.Name}, Age: {person.Age}");
+
+            var fruits = new List<string> { "Apple", "Banana", "Cherry" };
+            // Использование var в foreach
+            foreach (var fruit in fruits)
+            {
+                Console.WriteLine(fruit);
             }
 
-            var person = new { Name = "Alex", Age = 30 };
-            Console.WriteLine($"{person.Name}, {person.Age}");
-            // person — анонимный тип, доступен только через var
+            var myClass = new MyClass1(); // Тип: MyClass
+            myClass.PrintMessage(); // Вывод: Hello from MyClass!
 
             #endregion
 
@@ -721,6 +761,14 @@ namespace KR1
             }
 
             #endregion
+        }
+
+        class MyClass1
+        {
+            public void PrintMessage()
+            {
+                Console.WriteLine("Hello from MyClass!");
+            }
         }
     }
 }
